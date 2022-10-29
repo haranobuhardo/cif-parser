@@ -1,0 +1,119 @@
+
+#######################################################################
+#
+#                 Cambridge Crystallographic Data Centre
+#                                CCDC 
+#
+#######################################################################
+#
+# If this CIF has been generated from an entry in the Cambridge 
+# Structural Database, then it will include bibliographic, chemical, 
+# crystal, experimental, refinement or atomic coordinate data resulting 
+# from the CCDC's data processing and validation procedures.
+#
+#######################################################################
+
+data_ABAFUH
+_chemical_formula_moiety         '(C9 H8 Cu2 O4)n'
+_chemical_name_systematic        
+catena-[(\m-oxalato)-(\m-norbornadiene)-di-copper(i)]
+_symmetry_cell_setting           orthorhombic
+_symmetry_space_group_name_H-M   'P 21 21 21'
+_symmetry_Int_Tables_number      19
+_space_group_name_Hall           'P 2ac 2ab'
+loop_
+_symmetry_equiv_pos_site_id
+_symmetry_equiv_pos_as_xyz
+1 x,y,z
+2 1/2+x,1/2-y,-z
+3 -x,1/2+y,1/2-z
+4 1/2-x,-y,1/2+z
+_cell_length_a                   9.83359(14)
+_cell_length_b                   16.12197(32)
+_cell_length_c                   5.35783(9)
+_cell_angle_alpha                90
+_cell_angle_beta                 90
+_cell_angle_gamma                90
+_cell_volume                     849.413
+_cell_formula_units_Z            4
+loop_
+_atom_site_label
+_atom_site_type_symbol
+_atom_site_fract_x
+_atom_site_fract_y
+_atom_site_fract_z
+_atom_site_U_iso_or_equiv
+_atom_site_thermal_displace_type
+Cu1 Cu 0.2416(7) 1.07587(27) 0.2876(8) 0.0089 Uiso
+O1 O 0.3507(8) 0.99172(28) 0.0651(10) 0.0089 Uiso
+O2 O 0.4346(7) 1.07057(33) 0.4549(10) 0.0089 Uiso
+C1 C 0.2506(20) 1.1758(10) 0.0448(19) 0.0089 Uiso
+C2 C 0.1265(19) 1.1710(9) 0.1886(22) 0.0089 Uiso
+C3 C 0.4725(8) 0.97575(32) 0.1210(11) 0.0089 Uiso
+C4 C 0.5237(8) 1.02418(32) 0.3602(11) 0.0089 Uiso
+O3 O 0.5616(7) 0.92934(33) 0.0260(11) 0.0089 Uiso
+O4 O 0.6453(8) 1.00855(28) 0.4171(10) 0.0089 Uiso
+Cu2 Cu 0.7543(7) 0.92446(27) 0.1944(8) 0.0089 Uiso
+C5 C 0.7725(20) 0.8258(9) 0.4515(18) 0.0089 Uiso
+C6 C 0.8960(17) 0.8148(11) 0.3097(21) 0.0089 Uiso
+C7 C 0.6758(8) 0.7554(14) 0.3650(15) 0.0089 Uiso
+H1 H 0.7585(30) 0.8591(12) 0.6237(21) 0.0089 Uiso
+C8 C 0.8687(8) 0.7437(10) 0.1223(15) 0.0089 Uiso
+H2 H 0.9957(23) 0.8399(17) 0.3434(32) 0.0089 Uiso
+H3 H 0.5690(9) 0.7618(22) 0.4125(25) 0.0089 Uiso
+C9 C 0.7121(8) 0.7526(13) 0.0790(14) 0.0089 Uiso
+H4 H 0.9338(11) 0.7396(16) -0.0405(20) 0.0089 Uiso
+H5 H 0.7235(33) 0.6435(12) 0.6243(21) 0.0089 Uiso
+H6 H 0.6838(19) 0.8095(16) -0.0164(20) 0.0089 Uiso
+H7 H 0.6668(14) 0.6993(17) -0.0133(20) 0.0089 Uiso
+H8 H 0.9675(26) 0.6410(13) 0.3615(32) 0.0089 Uiso
+O5 O 0.1493(8) 1.00828(28) 0.5651(10) 0.0089 Uiso
+Cu3 Cu 0.2584(7) 0.92413(27) -0.2124(8) 0.0089 Uiso
+Cu4 Cu 0.7457(7) 1.07554(27) 0.6944(8) 0.0089 Uiso
+O6 O 0.8547(8) 0.99145(28) -0.0829(10) 0.0089 Uiso
+C10 C 0.7494(20) 0.6758(10) 0.4552(19) 0.0089 Uiso
+C11 C 0.8735(19) 0.6710(9) 0.3114(22) 0.0089 Uiso
+Cu5 Cu 0.7584(7) 0.57587(27) 0.2124(8) 0.0089 Uiso
+loop_
+_geom_bond_atom_site_label_1
+_geom_bond_atom_site_label_2
+_geom_bond_site_symmetry_1
+_geom_bond_site_symmetry_2
+Cu1 O1 1_555 1_555
+O1 C3 1_555 1_555
+O2 Cu1 1_555 1_555
+C1 Cu1 1_555 1_555
+C2 Cu1 1_555 1_555
+C3 C4 1_555 1_555
+C4 O2 1_555 1_555
+O3 C3 1_555 1_555
+O4 C4 1_555 1_555
+Cu2 O3 1_555 1_555
+C5 Cu2 1_555 1_555
+C6 Cu2 1_555 1_555
+C7 C5 1_555 1_555
+H1 C5 1_555 1_555
+C8 C6 1_555 1_555
+H2 C6 1_555 1_555
+H3 C7 1_555 1_555
+C9 C7 1_555 1_555
+H4 C8 1_555 1_555
+H5 C10 1_555 1_555
+H6 C9 1_555 1_555
+H7 C9 1_555 1_555
+H8 C11 1_555 1_555
+O5 Cu1 1_555 1_555
+Cu3 O1 1_555 1_555
+Cu4 O4 1_555 1_555
+O6 Cu2 1_555 1_555
+C10 C7 1_555 1_555
+C11 C8 1_555 1_555
+Cu5 C10 1_555 1_555
+C1 C2 1_555 1_555
+O4 Cu2 1_555 1_555
+C5 C6 1_555 1_555
+C8 C9 1_555 1_555
+C10 C11 1_555 1_555
+C11 Cu5 1_555 1_555
+
+#END

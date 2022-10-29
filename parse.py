@@ -6,23 +6,21 @@ import io, sys
 from pathlib import Path
 import os
 import csv
+import re
 
 # set default settings
 user_src_folder_path = r'src'
 user_dest_folder_path = r'dest'
-# file_path = 'qmof-000dce3.cif' # file name and location
-loop_seq = 2 # loop number that you want to alter or change
+loop_table_no = 2 # loop number that you want to alter or change
 user_column_to_keep = ['_atom_site_type_symbol', '_atom_site_label', 
-                        '_atom_site_symmetry_multiplicity',
+                        # '_atom_site_symmetry_multiplicity',
                         '_atom_site_fract_x',
                         '_atom_site_fract_y',
                         '_atom_site_fract_z'] # edit this to suit your needs
-user_keyword_to_find = 'charge'
+user_keywords_to_find = ['charge']
+target_keyword_column_name = '_atom_site_charge'
 file_list = []
 extend_dest = True # export each result to its own folder
-
-# file_path = sys.argv[1] if len(sys.argv) > 1 else file_path
-# loop_seq = sys.argv[2] if len(sys.argv) > 2 else loop_seq
 
 if not(os.path.isdir(user_src_folder_path) or os.path.isdir(user_dest_folder_path)): 
     raise Exception('Source or dest folder not found!')
@@ -31,11 +29,13 @@ for file in os.listdir(user_src_folder_path):
     if file.endswith(".cif"):
         file_list.append(file)
 
+file_list.sort() # sort file list
+
 # parsing file to python var
 
 def parse_cif(src_folder_path, file_path):
     column_to_keep = user_column_to_keep
-    keyword_to_find = user_keyword_to_find
+    keywords_to_find = user_keywords_to_find
 
     print('Start parsing', file_path, '...\n')
     with open(os.path.join(src_folder_path, file_path)) as f:
@@ -44,9 +44,12 @@ def parse_cif(src_folder_path, file_path):
         unedited_lines=''
         tables=[]
         loop_cnt = 0
+        block_name_keyword = 'data_'
 
-        line = f.readline().strip()
-        block_name = line
+        while block_name == '':
+            line = f.readline().strip()
+            unedited_lines += line + '\n'
+            block_name = line if line.startswith(block_name_keyword) else ''
 
         while line:
             if(line.strip() == 'loop_'):
@@ -84,12 +87,13 @@ def parse_cif(src_folder_path, file_path):
 
     return unedited_lines, columns, tables
                 
-def modify_column(column, table, column_to_keep, keyword_to_find):
+def modify_column(column, table, column_to_keep, keywords_to_find):
     column_to_keep = user_column_to_keep
-    keyword_to_find = user_keyword_to_find
+    keywords_to_find = user_keywords_to_find
 
     # create DataFrame from selected loop_
-    df = pd.read_csv(io.StringIO(table.replace('  ', ';')), names=column, sep=';')
+    # _table_virtual_file = io.StringIO(';'.join(re.split('''\s+(?=(?:[^'"]|'[^']*'|"[^"]*")*$)''', table)))
+    df = pd.read_csv(io.StringIO(table), names=column, sep='\s+')
     print('Creating table based on extracted data COMPLETED!')
 
     # filtering and modifying DataFrame
@@ -97,18 +101,24 @@ def modify_column(column, table, column_to_keep, keyword_to_find):
     list_output_df = []
     print('Filtering table\'s column COMPLETED')
 
+
     # iterating through all columns, find columns with KEYWORD string in it
     for i in df.columns:
-        if keyword_to_find in i:
+        if any(keyword in i for keyword in keywords_to_find):
             _ = base_df.copy()
             _[i] = df[i]
             list_output_df.append(_)
+
+    # if no keyword found on any columns, just output the default table with column to keep
+    if len(list_output_df) == 0:
+        list_output_df.append(base_df)
+
     print('Iterating through column that contain certain text COMPLETED!')
 
     return list_output_df
 
 
-if __name__ == "__main__":
+def main():
     metal_names = {} # for additional feature 08/07/22
 
     for i_file, file_path in enumerate(file_list): # loop through the source folder
@@ -118,25 +128,26 @@ if __name__ == "__main__":
 
         # exporting all possible tables
         for i_table in range(len(tables)):
-            if i_table == 1:  #change 1 to table that you want to modify (REMEMBER! index sequencing start from 0 in Python)
-                user_list_output_df = modify_column(columns[i_table], tables[i_table], user_column_to_keep, user_keyword_to_find)
+            if i_table == loop_table_no-1:
+                user_list_output_df = modify_column(columns[i_table], tables[i_table], user_column_to_keep, user_keywords_to_find)
             else:
-                user_list_output_df = pd.read_csv(io.StringIO(tables[i_table].replace('  ', ';')), names=columns[i_table], sep=';')
-                user_list_output_df = user_list_output_df.drop(columns='_symmetry_equiv_pos_site_id')
+                table_virtual_file = io.StringIO(';'.join(re.split('''\s+(?=(?:[^'"]|'[^']*'|"[^"]*")*$)''', tables[i_table])))
+                user_list_output_df = pd.read_csv(io.StringIO(tables[i_table]), names=columns[i_table], sep='\s+')
                 unedited_files = unedited_files + \
                             'loop_\n' + '\n'.join(user_list_output_df.columns) + '\n' + \
                             user_list_output_df.to_csv(index=False, header=False, line_terminator='\n', sep='|').replace('|', '  ').replace('"','')
                 continue
-            
+                
+
             metal_names[Path(file_path).stem] = user_list_output_df[0]['_atom_site_type_symbol'].values[0] # for additional feature 08/07/22, make sure the metal located on the first column of _atom_site_type_symbol
 
             for n, i in enumerate(user_list_output_df):
                 
-                # renaming column that have been found by KEYWORD
+                # renaming column that have been found by KEYWORD - toggle by intiial setting
                 for column in i.columns:
-                    if user_keyword_to_find in column:
+                    if any(keyword in column for keyword in user_keywords_to_find):
                         print(column)
-                        i = i.rename(columns={column:'_atom_site_charge'})
+                        i = i.rename(columns={column:target_keyword_column_name})
                         
                 final_file = unedited_files + \
                             'loop_\n' + '\n'.join(i.columns) + '\n' + \
@@ -159,3 +170,6 @@ if __name__ == "__main__":
     
     pd.DataFrame({'file_name': metal_names.keys(), 
                         'metal_name': metal_names.values()}).to_csv(os.path.join(user_dest_folder_path,'metal_names.csv'))
+
+if __name__ == "__main__":
+    main()
