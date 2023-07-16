@@ -75,9 +75,6 @@ def parse_cif(src_folder_path, file_path):
                     if line == 'loop_': 
                         go_on = False
                         # unedited_lines += line + '\n'
-
-                    
-                
             else:
                 unedited_lines += line + '\n'
                 line = f.readline().strip()
@@ -123,8 +120,8 @@ def main():
 
     for i_file, file_path in enumerate(file_list): # loop through the source folder
         print('\n##### File no:', i_file+1)
-        unedited_files, columns, tables = parse_cif(user_src_folder_path, file_path)
-        final_file = unedited_files
+        unedited_lines, columns, tables = parse_cif(user_src_folder_path, file_path)
+        final_file = unedited_lines
 
         # exporting all possible tables
         for i_table in range(len(tables)):
@@ -133,23 +130,22 @@ def main():
             else:
                 table_virtual_file = io.StringIO(';'.join(re.split('''\s+(?=(?:[^'"]|'[^']*'|"[^"]*")*$)''', tables[i_table])))
                 user_list_output_df = pd.read_csv(io.StringIO(tables[i_table]), names=columns[i_table], sep='\s+')
-                unedited_files = unedited_files + \
+                unedited_lines = unedited_lines + \
                             'loop_\n' + '\n'.join(user_list_output_df.columns) + '\n' + \
                             user_list_output_df.to_csv(index=False, header=False, line_terminator='\n', sep='|').replace('|', '  ').replace('"','')
                 continue
                 
-
             metal_names[Path(file_path).stem] = user_list_output_df[0]['_atom_site_type_symbol'].values[0] # for additional feature 08/07/22, make sure the metal located on the first column of _atom_site_type_symbol
 
             for n, i in enumerate(user_list_output_df):
                 
-                # renaming column that have been found by KEYWORD - toggle by intiial setting
+                # renaming column that have been found by KEYWORD - toggle by initial setting
                 for column in i.columns:
                     if any(keyword in column for keyword in user_keywords_to_find):
                         print(column)
                         i = i.rename(columns={column:target_keyword_column_name})
                         
-                final_file = unedited_files + \
+                final_file = unedited_lines + \
                             'loop_\n' + '\n'.join(i.columns) + '\n' + \
                             i.to_csv(index=False, header=False, line_terminator='\n', sep='|').replace('|', '  ').replace('"','')
 
