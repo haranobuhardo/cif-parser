@@ -1,22 +1,26 @@
 # boilerplate
 
-from ast import keyword
+# from ast import keyword
+# import csv
+# import re
 import pandas as pd
 import io, sys
 from pathlib import Path
 import os
-import csv
-import re
 
 # set default settings
 user_src_folder_path = r'src'
 user_dest_folder_path = r'dest'
 loop_table_no = 2 # loop number that you want to alter or change
-user_column_to_keep = ['_atom_site_type_symbol', '_atom_site_label', 
+user_column_to_keep = [ # edit this to suit your needs
+                        # '_atom_site_type_symbol', 
+                        '_atom_site_label', 
                         # '_atom_site_symmetry_multiplicity',
                         '_atom_site_fract_x',
                         '_atom_site_fract_y',
-                        '_atom_site_fract_z'] # edit this to suit your needs
+                        '_atom_site_fract_z'
+                    ] 
+metal_name_column = '_atom_site_label'
 user_keywords_to_find = ['charge']
 target_keyword_column_name = '_atom_site_charge'
 file_list = []
@@ -128,14 +132,14 @@ def main():
             if i_table == loop_table_no-1:
                 user_list_output_df = modify_column(columns[i_table], tables[i_table], user_column_to_keep, user_keywords_to_find)
             else:
-                table_virtual_file = io.StringIO(';'.join(re.split('''\s+(?=(?:[^'"]|'[^']*'|"[^"]*")*$)''', tables[i_table])))
+                # table_virtual_file = io.StringIO(';'.join(re.split('''\s+(?=(?:[^'"]|'[^']*'|"[^"]*")*$)''', tables[i_table])))
                 user_list_output_df = pd.read_csv(io.StringIO(tables[i_table]), names=columns[i_table], sep='\s+')
                 unedited_lines = unedited_lines + \
                             'loop_\n' + '\n'.join(user_list_output_df.columns) + '\n' + \
-                            user_list_output_df.to_csv(index=False, header=False, line_terminator='\n', sep='|').replace('|', '  ').replace('"','')
+                            user_list_output_df.to_csv(index=False, header=False, lineterminator='\n', sep='|').replace('|', '  ').replace('"','')
                 continue
                 
-            metal_names[Path(file_path).stem] = user_list_output_df[0]['_atom_site_type_symbol'].values[0] # for additional feature 08/07/22, make sure the metal located on the first column of _atom_site_type_symbol
+            metal_names[Path(file_path).stem] = user_list_output_df[0][metal_name_column].values[0] # for additional feature 08/07/22, make sure the metal located on the first column of _atom_site_type_symbol
 
             for n, i in enumerate(user_list_output_df):
                 
@@ -147,7 +151,7 @@ def main():
                         
                 final_file = unedited_lines + \
                             'loop_\n' + '\n'.join(i.columns) + '\n' + \
-                            i.to_csv(index=False, header=False, line_terminator='\n', sep='|').replace('|', '  ').replace('"','')
+                            i.to_csv(index=False, header=False, lineterminator='\n', sep='|').replace('|', '  ').replace('"','')
 
                 # check folder availability
                 extended_dest_folder = str(n) if extend_dest else ''
