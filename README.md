@@ -1,9 +1,26 @@
-# CIF Parser
+# Crystal Structure Toolkit (CIF Parser & MOL Converter)
 
 A simple Crystallographic Information File (CIF) parser built with Python and Pandas. This script extracts specific loops from CIF files, filters columns based on user preferences, and can search for and rename specific columns (e.g., charge-related columns).
 
+## Workflow: The Full Pipeline
+
+This toolkit handles the end-to-end preparation of crystal structures for research:
+
+### Step 1: Convert (MOL → CIF)
+If your structure is currently in a `.mol` format (common in **Material Studio**), use the converter in the `mol-to-cif-converter/` folder to generate a base CIF file with fractional coordinates.
+```bash
+python3 mol-to-cif-converter/convert.py
+```
+
+### Step 2: Parse & Clean (CIF → Standardized CIF)
+Once you have your CIF files, use the main `parse.py` script to strip unnecessary columns and ensure charge labels are correctly formatted for simulation engines.
+```bash
+python3 parse.py
+```
+
 ## Features
 
+- **Format Conversion**: Converts Cartesian coordinates from `.mol` files into Fractional coordinates for `.cif`.
 - **Loop Extraction**: Specifically targets and modifies a specified `loop_` block within CIF files.
 - **Column Filtering**: Retains a set of predefined columns (`_atom_site_label`, `_atom_site_fract_x`, etc.).
 - **Keyword Search**: Identifies and renames columns containing specific keywords (e.g., 'charge').
@@ -13,7 +30,7 @@ A simple Crystallographic Information File (CIF) parser built with Python and Pa
 ## Prerequisites
 
 - Python 3.x
-- `pandas` library
+- Check libraries on `requirements.txt`
 
 ## Installation
 
@@ -86,3 +103,8 @@ O1  0.3507(8)  0.99172(28)  0.0651(10)
 2.  **Processing**: It uses Pandas to read the table data within the specified loop.
 3.  **Modification**: It filters the DataFrame to keep only requested columns and searches for any columns containing the specified keywords.
 4.  **Exporting**: It reconstructs the CIF file with the modified table data and saves it to the destination path.
+
+## History
+
+This project was originally created 3 years ago to help a lecturer prepare crystal structure data for their thesis. It has been preserved as a lightweight utility for the materials science community.
+
