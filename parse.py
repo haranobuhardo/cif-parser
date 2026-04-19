@@ -94,7 +94,7 @@ def modify_column(column, table, column_to_keep, keywords_to_find):
 
     # create DataFrame from selected loop_
     # _table_virtual_file = io.StringIO(';'.join(re.split('''\s+(?=(?:[^'"]|'[^']*'|"[^"]*")*$)''', table)))
-    df = pd.read_csv(io.StringIO(table), names=column, sep='\s+')
+    df = pd.read_csv(io.StringIO(table), names=column, sep=r'\s+')
     print('Creating table based on extracted data COMPLETED!')
 
     # filtering and modifying DataFrame
@@ -133,7 +133,7 @@ def main():
                 user_list_output_df = modify_column(columns[i_table], tables[i_table], user_column_to_keep, user_keywords_to_find)
             else:
                 # table_virtual_file = io.StringIO(';'.join(re.split('''\s+(?=(?:[^'"]|'[^']*'|"[^"]*")*$)''', tables[i_table])))
-                user_list_output_df = pd.read_csv(io.StringIO(tables[i_table]), names=columns[i_table], sep='\s+')
+                user_list_output_df = pd.read_csv(io.StringIO(tables[i_table]), names=columns[i_table], sep=r'\s+')
                 unedited_lines = unedited_lines + \
                             'loop_\n' + '\n'.join(user_list_output_df.columns) + '\n' + \
                             user_list_output_df.to_csv(index=False, header=False, lineterminator='\n', sep='|').replace('|', '  ').replace('"','')
