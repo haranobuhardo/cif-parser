@@ -9,8 +9,9 @@ This toolkit handles the end-to-end preparation of crystal structures for resear
 ### Step 1: Convert (MOL → CIF)
 If your structure is currently in a `.mol` format (common in **Material Studio**), use the converter in the `mol-to-cif-converter/` folder to generate a base CIF file with fractional coordinates.
 ```bash
-python3 mol-to-cif-converter/convert.py
+python3 mol-to-cif-converter/convert.py SRC_MOL_FILE_HERE DESTINATION_CIF_FILE_HERE
 ```
+> **Note:** You must manually update the `LATTICE_VECTORS` variable inside `mol-to-cif-converter/convert.py` to match your material's specific dimensions before running the script.
 
 ### Step 2: Parse & Clean (CIF → Standardized CIF)
 Once you have your CIF files, use the main `parse.py` script to strip unnecessary columns and ensure charge labels are correctly formatted for simulation engines.

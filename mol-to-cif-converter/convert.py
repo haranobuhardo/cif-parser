@@ -66,20 +66,27 @@ def write_cif_file(cif_filename, atoms, lattice_vectors):
             fx, fy, fz = fractional_coords[i]
             file.write(f"{atom_label}  {atom_type}  {fx:.5f}  {fy:.5f}  {fz:.5f}  0\n")
 
+# Configuration: Update these lattice vectors based on your material's properties
+LATTICE_VECTORS = [
+    [59.872, 0, 0],
+    [0, 59.872, 0],
+    [0, 0, 59.872]
+]
+
 def mol_to_cif(mol_filename, cif_filename, lattice_vectors):
     """ Converts a .mol file to a .cif file. """
     atoms = read_mol_file(mol_filename)
     write_cif_file(cif_filename, atoms, lattice_vectors)
     print(f"Conversion successful: {mol_filename} → {cif_filename}")
 
-# Example lattice vectors (should be updated with correct values)
-lattice_vectors = [
-    [59.872, 0, 0],
-    [0, 59.872, 0],
-    [0, 0, 59.872]
-]
+if __name__ == "__main__":
+    import argparse
+    import sys
 
-# Convert NU-100.mol to NU-100.cif
-mol_input = os.path.join(SCRIPT_DIR, "NU-100.mol")
-cif_output = os.path.join(SCRIPT_DIR, "NU-100.cif")
-mol_to_cif(mol_input, cif_output, lattice_vectors)
+    parser = argparse.ArgumentParser(description="Convert .mol file to .cif file.")
+    parser.add_argument("input", help="Path to the source .mol file")
+    parser.add_argument("output", help="Path to the destination .cif file")
+
+    args = parser.parse_args()
+
+    mol_to_cif(args.input, args.output, LATTICE_VECTORS)
